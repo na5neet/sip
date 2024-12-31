@@ -1,0 +1,23 @@
+# Use a lightweight Python base image
+FROM python:3.11-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the application code
+COPY . .
+
+# Streamlit runs on port 8501 by default
+EXPOSE 8501
+
+# Set environment variables so Streamlit listens on all interfaces 
+# and doesn't open a browser in the container
+ENV STREAMLIT_SERVER_ADDRESS 0.0.0.0
+ENV STREAMLIT_BROWSER_GATHER_USAGE_STATS false
+
+# Run the app
+CMD ["streamlit", "run", "market_app.py"]
